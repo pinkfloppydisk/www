@@ -1,6 +1,15 @@
 import { bundleMDX } from 'mdx-bundler'
 import visit from 'unist-util-visit'
 
+const imageTransformer = () => {
+  return (tree) => {
+    // ❗ Commenting out the next 3 lines fixes the issue
+    visit(tree, 'image', (node, index, parent) => {
+      console.log('This breaks?')
+    })
+  }
+}
+
 async function compileMdx(slug, githubFiles) {
   const indexRegex = new RegExp(`${slug}\\/index.mdx?$`)
   const indexFile = githubFiles.find(({ path }) => indexRegex.test(path))
@@ -20,16 +29,7 @@ async function compileMdx(slug, githubFiles) {
     valueName: 'content',
   })
 
-  const imageTransformer = (tree) => {
-    // ❗ Commenting out the next 3 lines fixes the issue
-    visit(tree, 'image', (node, index, parent) => {
-      console.log('This breaks?')
-    })
-
-    return tree
-  }
-
-  const remarkPlugins = [() => imageTransformer]
+  const remarkPlugins = [imageTransformer]
 
   const { frontmatter, code } = await bundleMDX(indexFile.content, {
     files,
