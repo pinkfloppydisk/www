@@ -29,14 +29,12 @@ async function compileMdx(slug, githubFiles) {
     valueName: 'content',
   })
 
-  const remarkPlugins = [imageTransformer]
-
   const { frontmatter, code } = await bundleMDX(indexFile.content, {
     files,
     xdmOptions(options) {
       options.remarkPlugins = [
         ...(options.remarkPlugins ?? []),
-        ...remarkPlugins,
+        imageTransformer,
       ]
 
       return options
