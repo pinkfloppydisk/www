@@ -21,6 +21,7 @@ async function compileMdx(slug, githubFiles) {
   })
 
   const imageTransformer = (tree) => {
+		// ❗ Commenting out the next 3 lines fixes the issue
     visit(tree, 'image', (node, index, parent) => {
       console.log('This breaks?')
     })
